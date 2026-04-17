@@ -127,3 +127,156 @@ ua.com.havrcode.bookingvr
 
 ---
 
+
+
+
+
+
+
+
+
+Яку архітектуру закладаємо одразу
+
+Для твого Booking VR я хочу, щоб ти відразу привчився до нормального поділу.
+
+Ось правильний мінімальний каркас:
+
+booking-vr/
+├─ pom.xml
+├─ src/
+│  ├─ main/
+│  │  ├─ java/
+│  │  │  └─ com/bookingvr/
+│  │  │     ├─ BookingVrApplication.java
+│  │  │     ├─ controller/
+│  │  │     ├─ service/
+│  │  │     ├─ repository/
+│  │  │     ├─ entity/
+│  │  │     ├─ dto/
+│  │  │     ├─ config/
+│  │  │     └─ exception/
+│  │  └─ resources/
+│  │     ├─ templates/
+│  │     ├─ static/
+│  │     │  ├─ css/
+│  │     │  ├─ js/
+│  │     │  └─ images/
+│  │     └─ application.properties
+│  └─ test/
+
+Spring Boot рекомендує тримати головний клас у кореневому пакеті вище за інші класи, щоб component scan і пошук @Entity ішли по твоєму проєкту правильно. За замовчуванням Spring Boot також віддає статичні ресурси з /static, а для Thymeleaf стандартно використовується classpath:/templates/.
+
+За що відповідає кожна папка
+controller/
+
+Тут лежать класи, які приймають HTTP-запити.
+
+Наприклад:
+
+PublicBookingController
+AdminBookingController
+
+Їхня задача:
+
+прийняти запит
+викликати сервіс
+повернути HTML-сторінку або редірект
+
+Controller не повинен рахувати бізнес-логіку.
+
+service/
+
+Це серце проєкту.
+
+Тут буде:
+
+логіка календаря
+логіка доступності слотів
+логіка створення бронювання
+логіка ціни
+
+Наприклад:
+
+CalendarService
+BookingService
+PricingService
+AdminService
+repository/
+
+Тут інтерфейси для доступу до БД.
+
+Наприклад:
+
+DayConfigRepository
+TimeSlotRepository
+BookingRepository
+PricingSettingsRepository
+
+Spring Data JPA якраз дає цей стиль роботи через repository-інтерфейси.
+
+entity/
+
+Тут сутності, які зберігаються в БД.
+
+Для першої версії я бачу такі:
+
+DayConfig
+TimeSlot
+Booking
+PricingSettings
+BookingStatus
+PricingMode
+dto/
+
+Тут об’єкти для передачі даних між шарами або для форм.
+
+Наприклад:
+
+BookingRequestDto
+DayViewDto
+SlotViewDto
+PricingPreviewDto
+
+DTO — це не база даних, а форма зручної передачі даних.
+
+config/
+
+Тут конфігурація застосунку, якщо вона знадобиться:
+
+форматер дати
+базова конфігурація MVC
+початкові тестові дані
+exception/
+
+Тут свої винятки:
+
+SlotFullyBookedException
+DayClosedException
+InvalidBookingRequestException
+
+Поки можна навіть не чіпати, але папку закласти нормально.
+
+templates/
+
+HTML-шаблони для Thymeleaf.
+
+Наприклад:
+
+booking-calendar.html
+booking-day.html
+booking-form.html
+booking-success.html
+admin-calendar.html
+admin-pricing.html
+
+Thymeleaf — server-side шаблонізатор, який добре підходить саме для такого класичного HTML UI.
+
+static/
+
+Тут:
+
+CSS
+JS
+картинки
+
+Spring Boot за замовчуванням обслуговує статичний контент із /static.
