@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle}">Booking VR</title>
+    <link rel="stylesheet" th:href="@{/css/booking-calendar.css}">
+</head>
+
+<body>
+    <div class="container">
+        <h1 th:text="@{clubName}">Virtum VR</h1>
+        <h2>Бронювання</h2>
+        <p th:text="${monthLabel}">Квітень 2026</p>
+        <div class="calendar-placeholder">Тут буде календар бронювання</div>
+    </div>
+
+</body>
